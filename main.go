@@ -147,6 +147,8 @@ func createProject(p projectParameters) {
 	projectPath := p.getProjectPath()
 	fmt.Println(projectPath)
 
+	// check if the project dont already exist
+
 	// Create the main directory of the project
 	if isGitInstall() {
 		err := exec.Command("git", "init", projectPath).Run()
@@ -154,6 +156,7 @@ func createProject(p projectParameters) {
 			log.Fatal("Cannot git init the project :", err)
 		}
 	} else {
+		// os.MkdirAll()
 		// Create the folder mais la j'ai la flemme
 	}
 
@@ -194,6 +197,10 @@ func main() {
 	if !isGolangInstall() {
 		fmt.Println("You need to have Golang to use this tool")
 		return
+	}
+
+	if !isGitInstall() {
+		fmt.Println("/!\\ It would be better for you to install git")
 	}
 
 	if len(os.Args) == 1 {
