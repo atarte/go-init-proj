@@ -6,9 +6,17 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
+	"runtime"
 	"strings"
 )
+
+var FileList = []string{
+	".gitignore",
+	"README.md",
+	"main.go",
+}
 
 type ProjectType int64
 
@@ -32,6 +40,7 @@ type projectParameters struct {
 	name        string
 	username    string
 	repository  string
+	path        string
 	projectType ProjectType
 }
 
@@ -64,6 +73,20 @@ func getGitUsername() (string, error) {
 	return string(out[:len(out)-1]), nil
 }
 
+func getDefaultPath() string {
+	os := runtime.GOOS
+	switch os {
+	case "windows":
+		return ".\\"
+	case "darwin":
+		return ".//"
+	case "linux":
+		return ".//"
+	default:
+		return ".//"
+	}
+}
+
 func displayMenu() {
 	fmt.Println("Menu")
 }
@@ -75,16 +98,18 @@ func createWithDefaultArgs() {
 	}
 
 	username := "username"
-	// if isGitInstall() {
-	// 	if username, err := getGitUsername(); err != nil {
-	// 		username = "username"
-	// 	}
-	// }
+	if isGitInstall() {
+		u, err := getGitUsername()
+		if err == nil {
+			username = u
+		}
+	}
 
 	p := projectParameters{
 		name:        projName,
 		username:    username,
 		repository:  "github.com",
+		path:        getDefaultPath(),
 		projectType: HelloWorld,
 	}
 
@@ -92,10 +117,28 @@ func createWithDefaultArgs() {
 }
 
 func createWithArgs() {
-
+	/*
+		--help -h
+		--name -n
+		--username -u
+		--path -p
+		--repository -r
+		--type -t
+	*/
 }
 
 func createProject(p projectParameters) {
+	projectPath := filepath.Join(p.path, p.name)
+
+	// Create the main directory of the project
+	if isGitInstall() {
+		err := exec.Command("git", "init", projectPath)
+		if err != nil {
+			log.Fatal("Cannot git init the project")
+		}
+	} else {
+		// Create the folder mais la j'ai la flemme
+	}
 
 }
 
