@@ -1,3 +1,3 @@
 module github.com/atarte/go-init-proj
 
-go 1.19
+go 1.20
