@@ -26,4 +26,5 @@ tool for creating a new go project
  - Check if go is install (and probably the version)
  - Check if git is install
  - Check if the path is valide
- - 
+ - Do some test 
+ - use github action
