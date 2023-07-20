@@ -27,6 +27,7 @@ const gitIgnoreTemplate string = `# Golang default gitignore
 
 # Go workspace file
 go.work
+go.work.sum
 
 # Editor directories and files
 .idea
