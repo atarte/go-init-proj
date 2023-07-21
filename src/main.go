@@ -4,8 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"os"
-	"os/exec"
 
 	"github.com/atarte/go-init-proj/templates"
 	"github.com/atarte/go-init-proj/utils"
@@ -30,55 +28,6 @@ func displayVersion() {
 func displayUsage() {
 	fmt.Println("Usage:", AppName)
 	flag.PrintDefaults()
-}
-
-func createDirectory(name string) {
-	err := os.Mkdir(name, 0750)
-	if err != nil {
-		os.Exit(1)
-	}
-}
-
-// func createGomod(name string) {
-// 	if !utils.IsGolangInstall() {
-// 		return
-// 	}
-
-// 	var gomod_name string
-// 	git_username, err := utils.GetGitUsername()
-// 	if err != nil {
-// 		git_username = ""
-// 		gomod_name = "github.com/" + git_username + "/"
-// 	}
-
-// 	gomod_name += name
-
-// 	cmd := exec.Command("cd", name)
-// 	if err := cmd.Run(); err != nil {
-// 		// log.Fatal(err)
-// 		cmd = exec.Command("go", "mod", "init", gomod_name)
-// 		if err := cmd.Run(); err != nil {
-// 			// log.Fatal(err)
-// 		}
-// 	}
-// }
-
-func test() {
-	// ls
-	out, err := exec.Command("ls").Output()
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(string(out))
-
-	// ls
-	cmd := exec.Command("ls")
-	cmd.Dir = "src"
-	out, err = cmd.Output()
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(string(out))
 }
 
 func main() {
@@ -107,10 +56,12 @@ func main() {
 	}
 	if project_name != "" {
 		if !utils.IsProjectNameValid(project_name) {
-			log.Fatalln("Project name invalid!")
+			log.Fatalln("Project name invalid! It must follow the `[A-Za-z0-9_.-]` regex.")
 		}
 
-		createDirectory(project_name)
+		if err := utils.CreateMainDirectory(project_name); err != nil {
+			log.Fatal(err)
+		}
 		templates.CreateGomod(project_name)
 		templates.CreateGitIgnore(project_name)
 		templates.CreateMain(project_name)

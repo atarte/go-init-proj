@@ -38,14 +38,16 @@ func IsGitInstall() bool {
 // GetGitUsername retreve the git user name if set in the git config
 func GetGitUsername() (string, error) {
 	if !IsGitInstall() {
-		return "", errors.New("Git is not installed")
+		return "", errors.New("Git is not found")
 	}
 
 	out, err := exec.Command("git", "config", "--global", "user.name").Output()
 
 	if err != nil || string(out) == "" {
-		return "", errors.New("No username configure")
+		return "", errors.New("No username found in your gitconfig")
 	}
 
 	return string(out[:len(out)-1]), nil
 }
+
+// TODO: get go version to check if the go work or go mod is availble

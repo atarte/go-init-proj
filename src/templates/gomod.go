@@ -1,17 +1,17 @@
 package templates
 
 import (
-	"log"
+	"fmt"
 	"os/exec"
 
 	"github.com/atarte/go-init-proj/utils"
 )
 
-func CreateGomod(name string) {
+// CreateGomod create the go.mod file
+func CreateGomod(name string) error {
 	username, err := utils.GetGitUsername()
 	if err == nil {
 		username = "github.com/" + username + "/"
-		// log.Fatal(err)
 	}
 
 	project_name := username + name
@@ -19,6 +19,8 @@ func CreateGomod(name string) {
 	cmd := exec.Command("go", "mod", "init", project_name)
 	cmd.Dir = name
 	if err := cmd.Run(); err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("Cannot create the go.mod file: %s", err)
 	}
+
+	return nil
 }
