@@ -31,18 +31,14 @@ func displayUsage() {
 }
 
 func main() {
-
 	var help bool
-	flag.BoolVar(&help, "help", false, "Display all the command available")
-	flag.BoolVar(&help, "h", false, "Display all the command available (shorthand)")
+	utils.BoolFlag(&help, "help", "Display all the command available")
 
 	var version bool
-	flag.BoolVar(&version, "version", false, "Display app version")
-	flag.BoolVar(&version, "v", false, "Display app version (shorthand)")
+	utils.BoolFlag(&version, "version", "Display app version")
 
 	var project_name string
-	flag.StringVar(&project_name, "name", "", "Enter the name for the project")
-	flag.StringVar(&project_name, "n", "", "Enter the name for the project")
+	utils.StringFlag(&project_name, "name", "Enter the name for the project")
 
 	flag.Parse()
 
