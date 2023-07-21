@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 
 	"github.com/atarte/go-init-proj/templates"
 	"github.com/atarte/go-init-proj/utils"
@@ -62,6 +63,24 @@ func createDirectory(name string) {
 // 	}
 // }
 
+func test() {
+	// ls
+	out, err := exec.Command("ls").Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(out))
+
+	// ls
+	cmd := exec.Command("ls")
+	cmd.Dir = "src"
+	out, err = cmd.Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(out))
+}
+
 func main() {
 
 	var help bool
@@ -92,11 +111,10 @@ func main() {
 		}
 
 		createDirectory(project_name)
-		// templates.CreateGomod(project_name)
+		templates.CreateGomod(project_name)
 		templates.CreateGitIgnore(project_name)
 		templates.CreateMain(project_name)
-
-		fmt.Println("", os.Environ())
+		templates.CreateReadme(project_name)
 
 		return
 	}

@@ -37,7 +37,7 @@ func IsGitInstall() bool {
 
 // GetGitUsername retreve the git user name if set in the git config
 func GetGitUsername() (string, error) {
-	if IsGitInstall() {
+	if !IsGitInstall() {
 		return "", errors.New("Git is not installed")
 	}
 
@@ -49,19 +49,3 @@ func GetGitUsername() (string, error) {
 
 	return string(out[:len(out)-1]), nil
 }
-
-// GetGitUsername retreve the git user name if set in the git config
-// func GetGoVersion() (string, error) {
-// 	// if IsGitInstall() {
-// 	// 	return "", errors.New("Git is not installed")
-// 	// }
-
-// 	// out, err := exec.Command("git", "config", "--global", "user.name").Output()
-
-// 	// if err != nil || string(out) == "" {
-// 	// 	return "", errors.New("No username configure")
-// 	// }
-
-// 	// return string(out[:len(out)-1]), nil
-// 	// return ("", errpr)
-// }

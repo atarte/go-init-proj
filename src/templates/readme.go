@@ -7,7 +7,7 @@ import (
 )
 
 func CreateReadme(name string) {
-	file_path := name + "/.gitignore"
+	file_path := name + "/README.md"
 
 	var readmeTemplate string = fmt.Sprintf("# %s", name)
 

@@ -1,15 +1,24 @@
 package templates
 
-// const gomodTemplate string = `
-// `
+import (
+	"log"
+	"os/exec"
+
+	"github.com/atarte/go-init-proj/utils"
+)
 
 func CreateGomod(name string) {
-	// file_path := name + "/go.mod"
+	username, err := utils.GetGitUsername()
+	if err == nil {
+		username = "github.com/" + username + "/"
+		// log.Fatal(err)
+	}
 
-	// var gomodTemplate string = "module"
+	project_name := username + name
 
-	// err := os.WriteFile(file_path, []byte(gitIgnoreTemplate), 0666)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	cmd := exec.Command("go", "mod", "init", project_name)
+	cmd.Dir = name
+	if err := cmd.Run(); err != nil {
+		log.Fatal(err)
+	}
 }
