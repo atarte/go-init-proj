@@ -11,7 +11,7 @@ import (
 
 var (
 	AppName string = "go-init-proj"
-	Version string = "0.0.0"
+	Version string = "0.1.0"
 	// Build   string = "abcd"
 )
 
