@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/atarte/go-init-proj/templates"
 	"github.com/atarte/go-init-proj/utils"
@@ -12,7 +11,7 @@ import (
 
 var (
 	AppName string = "go-init-proj"
-	Version string = "0.0.0"
+	Version string = "0.1.0"
 	// Build   string = "abcd"
 )
 
@@ -31,50 +30,18 @@ func displayUsage() {
 	flag.PrintDefaults()
 }
 
-func createDirectory(name string) {
-	err := os.Mkdir(name, 0750)
-	if err != nil {
-		os.Exit(1)
-	}
-}
-
-// func createGomod(name string) {
-// 	if !utils.IsGolangInstall() {
-// 		return
-// 	}
-
-// 	var gomod_name string
-// 	git_username, err := utils.GetGitUsername()
-// 	if err != nil {
-// 		git_username = ""
-// 		gomod_name = "github.com/" + git_username + "/"
-// 	}
-
-// 	gomod_name += name
-
-// 	cmd := exec.Command("cd", name)
-// 	if err := cmd.Run(); err != nil {
-// 		// log.Fatal(err)
-// 		cmd = exec.Command("go", "mod", "init", gomod_name)
-// 		if err := cmd.Run(); err != nil {
-// 			// log.Fatal(err)
-// 		}
-// 	}
-// }
-
 func main() {
-
 	var help bool
-	flag.BoolVar(&help, "help", false, "Display all the command available")
-	flag.BoolVar(&help, "h", false, "Display all the command available (shorthand)")
+	utils.CustomBoolFlag(&help, "help", "Display all the command available.")
 
 	var version bool
-	flag.BoolVar(&version, "version", false, "Display app version")
-	flag.BoolVar(&version, "v", false, "Display app version (shorthand)")
+	utils.CustomBoolFlag(&version, "version", "Display app version.")
 
 	var project_name string
-	flag.StringVar(&project_name, "name", "", "Enter the name for the project")
-	flag.StringVar(&project_name, "n", "", "Enter the name for the project")
+	utils.CustomStringFlag(&project_name, "name", "Enter the name for the project.")
+
+	var gowork bool
+	flag.BoolVar(&gowork, "gowork", false, "Create a gowork environment.")
 
 	flag.Parse()
 
@@ -88,15 +55,28 @@ func main() {
 	}
 	if project_name != "" {
 		if !utils.IsProjectNameValid(project_name) {
-			log.Fatalln("Project name invalid!")
+			log.Fatalln("Project name invalid! It must follow the `[A-Za-z0-9_.-]` regex.")
 		}
 
-		createDirectory(project_name)
-		// templates.CreateGomod(project_name)
-		templates.CreateGitIgnore(project_name)
-		templates.CreateMain(project_name)
+		if err := utils.CreateMainDirectory(project_name); err != nil {
+			log.Fatal(err)
+		}
 
-		fmt.Println("", os.Environ())
+		var file_path string = ""
+		if gowork {
+			file_path = "/src"
+
+			if err := utils.CreateScrDirectory(project_name); err != nil {
+				log.Fatal(err)
+			}
+
+			templates.CreateGowork(project_name)
+		}
+
+		templates.CreateGitIgnore(project_name)
+		templates.CreateReadme(project_name)
+		templates.CreateMain(project_name, file_path)
+		templates.CreateGomod(project_name, file_path)
 
 		return
 	}

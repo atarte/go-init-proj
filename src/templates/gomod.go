@@ -1,15 +1,26 @@
 package templates
 
-// const gomodTemplate string = `
-// `
+import (
+	"fmt"
+	"os/exec"
 
-func CreateGomod(name string) {
-	// file_path := name + "/go.mod"
+	"github.com/atarte/go-init-proj/utils"
+)
 
-	// var gomodTemplate string = "module"
+// CreateGomod create a go.mod file
+func CreateGomod(name string, path string) error {
+	username, err := utils.GetGitUsername()
+	if err == nil {
+		username = "github.com/" + username + "/"
+	}
 
-	// err := os.WriteFile(file_path, []byte(gitIgnoreTemplate), 0666)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	project_name := username + name
+
+	cmd := exec.Command("go", "mod", "init", project_name)
+	cmd.Dir = name + path
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("Cannot create the go.mod file: %s", err)
+	}
+
+	return nil
 }

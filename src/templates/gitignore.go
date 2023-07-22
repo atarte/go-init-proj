@@ -1,7 +1,7 @@
 package templates
 
 import (
-	"log"
+	"fmt"
 	"os"
 )
 
@@ -38,10 +38,14 @@ go.work.sum
 *.sln
 *.sw?`
 
-func CreateGitIgnore(name string) {
-	file_path := name + "/.gitignore"
-	err := os.WriteFile(file_path, []byte(gitIgnoreTemplate), 0666)
+// CreateGitIgnore create the .gitignore file
+func CreateGitIgnore(name string) error {
+	gitignore_path := name + "/.gitignore"
+
+	err := os.WriteFile(gitignore_path, []byte(gitIgnoreTemplate), 0666)
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("Cannot create the .gitignore file: %s", err)
 	}
+
+	return nil
 }
