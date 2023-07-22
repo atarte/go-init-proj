@@ -14,8 +14,10 @@ func main() {
 }`
 
 // CreateMain create the main.go file
-func CreateMain(name string) error {
-	main_path := name + "/main.go"
+func CreateMain(name string, path string) error {
+	main_path := name + path + "/main.go"
+
+	fmt.Println(main_path)
 
 	err := os.WriteFile(main_path, []byte(mainTemplate), 0666)
 	if err != nil {
@@ -24,3 +26,5 @@ func CreateMain(name string) error {
 
 	return nil
 }
+
+// CheckMainCreated check if the main.go file as been created

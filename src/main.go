@@ -32,13 +32,16 @@ func displayUsage() {
 
 func main() {
 	var help bool
-	utils.BoolFlag(&help, "help", "Display all the command available")
+	utils.CustomBoolFlag(&help, "help", "Display all the command available.")
 
 	var version bool
-	utils.BoolFlag(&version, "version", "Display app version")
+	utils.CustomBoolFlag(&version, "version", "Display app version.")
 
 	var project_name string
-	utils.StringFlag(&project_name, "name", "Enter the name for the project")
+	utils.CustomStringFlag(&project_name, "name", "Enter the name for the project.")
+
+	var gowork bool
+	flag.BoolVar(&gowork, "gowork", false, "Create a gowork environment.")
 
 	flag.Parse()
 
@@ -58,10 +61,22 @@ func main() {
 		if err := utils.CreateMainDirectory(project_name); err != nil {
 			log.Fatal(err)
 		}
-		templates.CreateGomod(project_name)
+
+		var file_path string = ""
+		if gowork {
+			file_path = "/src"
+
+			if err := utils.CreateScrDirectory(project_name); err != nil {
+				log.Fatal(err)
+			}
+
+			templates.CreateGowork(project_name)
+		}
+
 		templates.CreateGitIgnore(project_name)
-		templates.CreateMain(project_name)
 		templates.CreateReadme(project_name)
+		templates.CreateMain(project_name, file_path)
+		templates.CreateGomod(project_name, file_path)
 
 		return
 	}

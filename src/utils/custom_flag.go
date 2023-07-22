@@ -3,7 +3,7 @@ package utils
 import "flag"
 
 // BoolFlag create flag for short and long argument for bool with false as the defautl arg
-func BoolFlag(arg *bool, name string, description string) {
+func CustomBoolFlag(arg *bool, name string, description string) {
 	// Long flag
 	flag.BoolVar(arg, name, false, "")
 
@@ -12,7 +12,7 @@ func BoolFlag(arg *bool, name string, description string) {
 }
 
 // StringFlag create flag for short and long argument for bool with "" as the default argument
-func StringFlag(arg *string, name string, description string) {
+func CustomStringFlag(arg *string, name string, description string) {
 	// Long flag
 	flag.StringVar(arg, name, "", "")
 
